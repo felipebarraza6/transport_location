@@ -1,0 +1,1 @@
+from .colleges import CollegeModelSerializer
