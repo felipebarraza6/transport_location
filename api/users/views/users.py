@@ -21,7 +21,7 @@ from rest_framework.permissions import (
 # Models
 from api.users.models import User 
 # Serializers
-from api.users.serializers import UserResponseSerializer, UserLoginSerializer, UserModelSerializer, UserSignUpSerializer
+from api.users.serializers import ResetPasswordSerializer, UserResponseSerializer, UserLoginSerializer, UserModelSerializer, UserSignUpSerializer
 
 
 class UserViewSet(mixins.RetrieveModelMixin, 
@@ -53,6 +53,15 @@ class UserViewSet(mixins.RetrieveModelMixin,
     
 
     @action(detail=False, methods=['post'])
+    def reset_password(self, request):
+        serializer = ResetPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = {
+            'message': 'ACTUALIZADO'
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['post'])
     def login(self, request):
         """User sign in."""
         serializer = UserLoginSerializer(data=request.data)
@@ -63,7 +72,6 @@ class UserViewSet(mixins.RetrieveModelMixin,
             'access_token': token
         }
         return Response(data, status=status.HTTP_201_CREATED)
-
 
     @action(detail=False, methods=['post'])
     def signup(self, request):
@@ -81,12 +89,12 @@ class UserViewSet(mixins.RetrieveModelMixin,
 
         if(response.data['type_user']=='ADM'): 
             data_user_type = {
-                'admin'
+                    'admin':'a'
             }
             
         data = {
                 'user': response.data,
-                'data': data_user_type
+                'profile_data': data_user_type
             }
 
         response.data = data

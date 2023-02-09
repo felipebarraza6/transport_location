@@ -37,18 +37,4 @@ class CollegeViewSet(mixins.RetrieveModelMixin,
     def retrieve(self, request, *args, **kwargs):
         """Add extra data to the response."""
         response = super(CollegeViewSet, self).retrieve(request, *args, **kwargs)
-
-        data_user_type = {}
-
-        if(response.data['type_user']=='ADM'): 
-            data_user_type = {
-                'admin'
-            }
-            
-        data = {
-                'data':response.data,
-                'data': data_user_type
-            }
-
-        response.data = data
         return response 

@@ -8,6 +8,7 @@ class AttendancesBook(ModelApi):
     assisted_students = models.IntegerField(default=0)
     absent_students = models.IntegerField(default=0)
     total_students = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.date)

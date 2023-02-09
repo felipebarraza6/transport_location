@@ -25,7 +25,24 @@ class UserModelSerializer(serializers.ModelSerializer):
 class UserResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','username', 'first_name', 'last_name', 'dni', 'phone_number', 'type_user')
+        fields = ('id','username', 'email','first_name', 'last_name', 'dni', 'phone_number', 'type_user')
+
+class ResetPasswordSerializer(serializers.Serializer):
+    user = serializers.EmailField()
+    new_password = serializers.CharField(min_length=6, max_length=64)
+
+    def validate(self, data):
+        user = data['user']
+        try:
+            get_user = User.objects.get(email=user)
+            data_phone_number = get_user.phone_number
+            data_email = get_user.email
+        except:
+             raise serializers.ValidationError('El usuario no existe!')
+        get_user.set_password(data['new_password'])
+        get_user.save()
+
+        return data
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -55,6 +72,8 @@ class UserSignUpSerializer(serializers.Serializer):
     )
 
     first_name = serializers.CharField(max_length=500)
+
+    last_name = serializers.CharField(max_length=500)
 
     username = serializers.CharField(
 		min_length=4,
