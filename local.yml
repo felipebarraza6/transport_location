@@ -25,3 +25,12 @@ services:
             - .:/code
         ports:
             - "8000:8000"
+
+    react_crm:
+        build: ./ui_transport       
+        image: ui_transport
+        ports:
+            - "4200:80"
+        depends_on:
+            - django
+            - postgres
