@@ -39,14 +39,21 @@ const UpdateUser = () => {
     })
     return rq
   }
-  console.log(valuesInput)
 
   const changeValueInput = (e) => {
-    setValues({
-      ...valuesInput,
-      [e.target.name]: e.target.value
-    })
-  }
+    if(e.target){
+      setValues({
+        ...valuesInput,
+        [e.target.name]: e.target.value
+      })
+    }else {
+      setValues({
+        ...valuesInput,
+        'type_user': e    
+      })
+
+    }
+      }
 
   useEffect(()=> {
     setValues({...state.selectedUser})

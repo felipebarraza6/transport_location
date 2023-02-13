@@ -5,10 +5,6 @@ import Container from '../components/home/Container'
 import FooterApp from '../components/home/FooterApp'
 import { BrowserRouter } from 'react-router-dom'
 
-//import modals
-import CreateUser from '../components/users/modals/Create'
-
-
 
 const Home = () => {
 

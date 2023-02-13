@@ -30,6 +30,7 @@ const HeaderApp = () => {
           </Button>
         </Link>
       </Col>
+      {state.user.type_user === 'ADM' && <>
       <Col style={styles.colMenu}>
         <Link to='/users'>
           <Button type='primary'>
@@ -45,12 +46,13 @@ const HeaderApp = () => {
          </Link>
       </Col>
       <Col style={styles.colMenu}>
-        <Link to='/attendance_books'>
+        <Link to='/attendances'>
           <Button type='primary'>
-            Libros de asistencía            
+            Registro de asistencía            
           </Button>
         </Link>
       </Col>
+</>}
       <Col style={styles.colMenu}>
         <Link to='/profile'>
           <Button icon={<UserOutlined />}>

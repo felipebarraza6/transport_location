@@ -32,7 +32,15 @@ class LocationViewSet(mixins.RetrieveModelMixin,
     queryset = Location.objects.all()
     serializer_class = LocationModelSerializer    
     lookup_field = 'id'
-    
+
+    class LocationFilter(filters.FilterSet):
+        class Meta:
+            model = Location            
+            fields = {
+                'driver': ['exact'],
+            }
+
+    filterset_class = LocationFilter    
 
     def retrieve(self, request, *args, **kwargs):
         """Add extra data to the response."""

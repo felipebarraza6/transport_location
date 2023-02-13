@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext } from 'react'
+import React, { createContext, useReducer } from 'react'
 
 import List from '../components/users/List'
 import { Row, Col, Typography,
@@ -40,11 +40,9 @@ const Users = () => {
         <CreateUser />
         <UpdateUser />
         <ChangePassword />
-        <Col span={4}>
-          <Title  style={styles.title} level={2}>Usuarios</Title>
-        </Col>
+        
         <Col span={20}>
-          <Card extra={<Button icon={<UserAddOutlined />} 
+          <Card title='Usuarios' extra={<Button icon={<UserAddOutlined />} 
             type='primary' onClick={openModalUserCreate}>Crear Usuario</Button>}>
               <List />
           </Card>

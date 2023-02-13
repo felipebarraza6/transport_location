@@ -1,11 +1,10 @@
 from django.db import models
 from api.utils.models import ModelApi
 from .students import Student
-from .attendances_books import AttendancesBook
 
 class Assists(ModelApi):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    attendance_book = models.ForeignKey(AttendancesBook, on_delete=models.CASCADE)
+    date = models.DateField()
     is_attend = models.BooleanField(default=False)
     note = models.TextField(max_length=1200, blank=True, null=True)
 

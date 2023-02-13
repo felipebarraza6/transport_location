@@ -1,6 +1,6 @@
 from django.contrib import admin
 from api.transports.models import (College, Student, 
-                                   Grade, AttendancesBook, 
+                                   Grade,  
                                    Assists, Location)
 # Register your models here.
 
@@ -15,10 +15,6 @@ class StudentAdmin(admin.ModelAdmin):
 
 @admin.register(Grade)
 class GradeAdmin(admin.ModelAdmin):
-    list_display = ('id', )
-
-@admin.register(AttendancesBook)
-class AttendancesBookAdmin(admin.ModelAdmin):
     list_display = ('id', )
 
 @admin.register(Assists)

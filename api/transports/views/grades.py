@@ -34,9 +34,4 @@ class GradeViewSet(mixins.RetrieveModelMixin,
     lookup_field = 'id'
     
 
-    def retrieve(self, request, *args, **kwargs):
-        """Add extra data to the response."""
-        response = super(GradeViewSet, self).retrieve(request, *args, **kwargs)
-        
-        response.data = data
-        return response 
+    

@@ -1,92 +1,65 @@
-import React, { useContext } from 'react'
-import { Row, Col, Card, 
-        Button, Typography } from 'antd'
-import { UserOutlined, BuildOutlined, BookOutlined,
-         UsergroupAddOutlined, OrderedListOutlined,
-         PushpinOutlined } from '@ant-design/icons'
-import { AppContext } from '../../App'
+import React, { useContext, useState, useEffect } from 'react'
+import { Row, Col, Typography } from 'antd'
 
+import 'leaflet/dist/leaflet.css'
+import icon from 'leaflet/dist/images/marker-icon.png'
+import iconShadow from 'leaflet/dist/images/marker-shadow.png'
+import { AppContext } from '../../App'
+import { Map, Marker, Popup, TileLayer, MapContainer } from 'react-leaflet'
+import L from 'leaflet'
+
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+      iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+      iconUrl: require('leaflet/dist/images/marker-icon.png'),
+      shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+})
 
 const QuickFunctions = () => {
 
-  const { Title } = Typography
 
   const { state, dispatch } = useContext(AppContext)
+  const [coordinates, setCoordinates] = useState({
+    latitude: state.profile.location.latitude,
+    longitude: state.profile.location.longitude,
+  })
 
-  const functionsAdmin = [
-    {
-      'name': 'Crear Usuario',
-      'type_user': ['admin'],
-      'icon': <UserOutlined />,
-      'func': () => {
-        dispatch({ type: 'OPEN_USER_CREATE', payload: true })
-      }
-    },
-    {
-      'name': 'Ver Usuarios',
-      'type_user': ['admin'],
-      'icon': <UserOutlined />
-    },
-    {
-      'name': 'Crear Colegio',
-      'type_user': ['admin'],
-      'icon': <BuildOutlined />
-    },
-    {
-      'name': 'Ver colegios',
-      'type_user': ['admin'],
-      'icon': <BuildOutlined />
-    },
-    {
-      'name': 'Crear Estudiante',
-      'type_user': ['admin'],
-      'icon': <BookOutlined />
-    },
-    {
-      'name': 'Ver estudiantes',
-      'type_user': ['admin'],
-      'icon': <BookOutlined />
-    },
-    {
-      'name': 'Crear Curso',
-      'type_user': ['admin'],
-      'icon': <UsergroupAddOutlined />
-    },
-    {
-      'name': 'Ver Cursos',
-      'type_user': ['admin'],
-      'icon': <UsergroupAddOutlined />
-    },
-    {
-      'name': 'Crear libro de asistencía',
-      'type_user': ['admin'],
-      'icon': <OrderedListOutlined />
-    },
-    {
-      'name': 'Ver libros de asistencía',
-      'type_user': ['admin'],
-      'icon': <OrderedListOutlined />
-    },
-    {
-      'name': 'Registro rutas de conductores',
-      'type_user': ['admin'],
-      'icon': <PushpinOutlined />
-    },
-  ]
+  
+
+  console.log(state)
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      async(position) => {
+        setCoordinates({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      (error) => console.error(error)
+    ); 
+  },[])
 
 
-  return(<Row justify={'start'} align={'middle'} style={styles.container}>
-      <Col span={6} >
-        <Title level={2} style={styles.title}>
-          <u>ACCESOS DIRECTOS</u>
-        </Title>
-      </Col>
-     {functionsAdmin.map((x, index)=> <Col key={index} span={6}>
-        <Card style={styles.card} hoverable>
-          <Button icon={x.icon} type='ghost' size='large' onClick={x.func}>{x.name}</Button>
-        </Card>
-       </Col>)} 
-    </Row>)
+  return(<Row justify={'center'} align={'middle'}>
+    <Col xl={6} xs={24} lg={6} style={{marginTop:'50px'}}>
+      <Typography.Title level={3}>Ubicación en tiempo real</Typography.Title>
+      Conductor/a: <b>{state.profile.students[0].grade.driver.first_name} {state.profile.students[0].grade.driver.last_name}</b>
+    </Col>
+    <Col xl={18} xs={24} lg={18} style={{marginTop:'50px'}}>
+    <MapContainer center={[coordinates.latitude, coordinates.longitude]} zoom={13} scrollWheelZoom={false}>
+    <TileLayer
+      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    />
+    <Marker position={[coordinates.latitude, coordinates.longitude]}>
+      <Popup>
+        Ubicación del conductor
+      </Popup>
+    </Marker>
+  </MapContainer>
+</Col>
+         </Row>)
 }
 
 const styles = { 
@@ -94,7 +67,7 @@ const styles = {
     marginTop:'150px'
   },
   title: {
-    margin: '20px'
+    margin: '20px',
   },
   card: {
     margin:'5px',

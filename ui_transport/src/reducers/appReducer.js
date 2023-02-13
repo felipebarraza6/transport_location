@@ -18,7 +18,7 @@ export const appReducer = (state, action) => {
         case 'UPDATE':                
           localStorage.setItem("user", JSON.stringify(action.payload.user))            
           localStorage.setItem("type_user", JSON.stringify(action.payload.user.type_user))                                
-          localStorage.setItem("profile", JSON.stringify(action.payload.profile_data))                                
+          localStorage.setItem("profile", JSON.stringify(action.payload.profile))                                
 
           return {
             ...state,

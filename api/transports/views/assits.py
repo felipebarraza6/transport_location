@@ -14,7 +14,7 @@ from rest_framework.permissions import (
 )
 
 from api.transports.models import Assists 
-from api.transports.serializers import AssistsModelSerializer 
+from api.transports.serializers import AssistsModelSerializer, AssistsModelSerializerCreate 
 
 
 class AssistsViewSet(mixins.RetrieveModelMixin, 
@@ -30,13 +30,14 @@ class AssistsViewSet(mixins.RetrieveModelMixin,
 
     filter_backends = (filters.DjangoFilterBackend,)
     queryset = Assists.objects.all()
-    serializer_class = AssistsModelSerializer   
     lookup_field = 'id'
     
+    def get_serializer_class(self):
+        if self.action in ['create', 'update']:
+            return AssistsModelSerializerCreate     
+        else:
+            return AssistsModelSerializer 
 
-    def retrieve(self, request, *args, **kwargs):
-        """Add extra data to the response."""
-        response = super(AssistsViewSet, self).retrieve(request, *args, **kwargs)
-        
-        response.data = data
-        return response 
+
+    
+    

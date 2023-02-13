@@ -14,7 +14,7 @@ from rest_framework.permissions import (
 )
 
 from api.transports.models import Student 
-from api.transports.serializers import StudentModelSerializer 
+from api.transports.serializers import StudentModelSerializerCreate, StudentModelSerializer 
 
 
 class StudentViewSet(mixins.RetrieveModelMixin, 
@@ -30,12 +30,13 @@ class StudentViewSet(mixins.RetrieveModelMixin,
 
     filter_backends = (filters.DjangoFilterBackend,)
     queryset = Student.objects.all()
-    serializer_class = StudentModelSerializer     
     lookup_field = 'id'
     
+    def get_serializer_class(self):
+        if self.action in ['create', 'update']:
+            return StudentModelSerializerCreate       
+        else:
+            return StudentModelSerializer 
 
-    def retrieve(self, request, *args, **kwargs):
-        """Add extra data to the response."""
-        response = super(GradeViewSet, self).retrieve(request, *args, **kwargs)
-        response.data = data
-        return response 
+
+    
