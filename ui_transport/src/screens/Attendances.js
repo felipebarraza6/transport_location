@@ -1,38 +1,34 @@
-import React, { createContext, useReducer } from 'react'
-import { Row, Col } from 'antd'
-import List from '../components/attendance/List'
-import { attendancesReducer } from '../reducers/attendancesReducer'
+import React, { createContext, useReducer } from "react";
+import { Row, Col } from "antd";
+import List from "../components/attendance/List";
+import { attendancesReducer } from "../reducers/attendancesReducer";
 
-export const AttendancesContext = createContext()
-
-
+export const AttendancesContext = createContext();
 
 const Attendances = () => {
-
   const initialState = {
-    attendances: []
-  }
+    attendances: [],
+  };
 
-  const [state, dispatch] = useReducer(attendancesReducer, initialState)
+  const [state, dispatch] = useReducer(attendancesReducer, initialState);
 
-  console.log(state)
+  console.log(state);
 
-  return(<AttendancesContext.Provider value={{ state, dispatch }}>
-    <Row style={styles.container} justify='center'>
-      <Col span={17}>
-        <List />
-      </Col>
-    </Row>
-    </AttendancesContext.Provider>)
-
-}
-
+  return (
+    <AttendancesContext.Provider value={{ state, dispatch }}>
+      <Row style={styles.container} justify="center">
+        <Col span={window.innerWidth > 900 ? 17 : 24}>
+          <List />
+        </Col>
+      </Row>
+    </AttendancesContext.Provider>
+  );
+};
 
 const styles = {
-  container:{
-    padding:'20px'
-  }
-}
+  container: {
+    padding: "20px",
+  },
+};
 
-
-export default Attendances
+export default Attendances;

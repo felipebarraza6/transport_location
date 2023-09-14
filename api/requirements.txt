@@ -3,7 +3,6 @@ djangorestframework
 psycopg2-binary
 gunicorn
 Pillow
-uwsgi
 django-cors-headers
 django-filter
 requests

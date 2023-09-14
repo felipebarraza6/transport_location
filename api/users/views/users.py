@@ -13,21 +13,21 @@ from django_filters import rest_framework as filters
 
 # Permissions
 from rest_framework.permissions import (
-	AllowAny,
-	IsAuthenticated
+    AllowAny,
+    IsAuthenticated
 )
 
 
 # Models
-from api.users.models import User 
+from api.users.models import User
 from api.transports.models import Student, Location
 # Serializers
 from api.users.serializers import ResetPasswordSerializer, UserResponseSerializer, UserLoginSerializer, UserModelSerializer, UserSignUpSerializer
 from api.transports.serializers import LocationModelSerializer, StudentModelSerializer
 
 
-class UserViewSet(mixins.RetrieveModelMixin, 
-                  mixins.UpdateModelMixin, 
+class UserViewSet(mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
                   mixins.ListModelMixin,
                   mixins.DestroyModelMixin,
                   viewsets.GenericViewSet,):
@@ -52,7 +52,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
     queryset = User.objects.filter(is_verified=True)
     serializer_class = UserModelSerializer
     lookup_field = 'username'
-     
+
     class UserFilter(filters.FilterSet):
         class Meta:
             model = User
@@ -61,7 +61,6 @@ class UserViewSet(mixins.RetrieveModelMixin,
             }
 
     filterset_class = UserFilter
-    
 
     @action(detail=False, methods=['post'])
     def reset_password(self, request):
@@ -95,26 +94,30 @@ class UserViewSet(mixins.RetrieveModelMixin,
     def retrieve(self, request, *args, **kwargs):
         """Add extra data to the response."""
         response = super(UserViewSet, self).retrieve(request, *args, **kwargs)
-        
+
         data_user_type = {}
 
-        if(response.data['type_user']=='GUA'): 
-            students = Student.objects.filter(guardian=response.data['id'])            
+        if (response.data['type_user'] == 'GUA'):
+            data_students = []
+            data_location = []
+            students = Student.objects.filter(guardian=response.data['id'])
             serializer = StudentModelSerializer(students, many=True)
-            id_driver=serializer.data[0]['grade']['driver']['id']
-            location = Location.objects.filter(driver=id_driver).first()            
-            serializer2 = LocationModelSerializer(location, many=False)
+            if serializer.data:
+                data_students = serializer.data
+                id_driver = serializer.data[0]['grade']['driver']['id']
+                location = Location.objects.filter(driver=id_driver).first()
+                serializer2 = LocationModelSerializer(location, many=False)
+                data_location = serializer2.data
 
             data_user_type = {
-                    'students':serializer.data,
-                    'location': serializer2.data
-            }
-        
-            
-        data = {
-                'user': response.data,
-                'profile_data': data_user_type
+                'students': data_students,
+                'location': data_location
             }
 
+        data = {
+            'user': response.data,
+            'profile_data': data_user_type
+        }
+
         response.data = data
-        return response 
+        return response
